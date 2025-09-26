@@ -11,11 +11,15 @@ logger = logging.getLogger()
 def read_data_callback(self, callbackFunction):
     self.keep_running = True
     while self.keep_running:
-        data = self.ser.read()
-        for byte in data:
-            packet = self.input(byte)
-            if (packet != None):
-                callbackFunction(packet)
+        try:
+          data = self.ser.read()
+        except:
+          logging.info(f'Serial read returned no data')
+        else:
+            for byte in data:
+                packet = self.input(byte)
+                if (packet != None):
+                    callbackFunction(packet)
 Vedirect.read_data_callback = read_data_callback
 
 class VictronSerial:
